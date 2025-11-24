@@ -10,6 +10,26 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 
+#include <string>
+#include <vector>
+#include <cstdint> 
+
+std::vector<uint8_t> packBools(const std::vector<bool>& flags) {
+    std::vector<uint8_t> bytes;
+    bytes.reserve(flags.size());
+
+    for (bool b : flags)
+        bytes.push_back(b ? 1 : 0);
+
+    return bytes;
+}
+
+std::vector<uint8_t> u16stringToBytes(const std::u16string& s) {
+    const uint8_t* ptr = reinterpret_cast<const uint8_t*>(s.data());
+    size_t size = s.size() * sizeof(char16_t);
+    return std::vector<uint8_t>(ptr, ptr + size);
+}
+
 inline HMODULE GetProcessId(int TargetId)
 {
     HANDLE TargetProcess;
@@ -18,9 +38,6 @@ inline HMODULE GetProcessId(int TargetId)
     CloseHandle(snapshot); 
     CloseHandle(snapshot);
 }
-
-#include <windows.h>
-#include <tlhelp32.h>
 
 inline HMODULE GetProcess(const wchar_t* processName)
 {
