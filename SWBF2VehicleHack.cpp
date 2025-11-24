@@ -61,7 +61,9 @@ int main() {
         printf("\nId >> ");
         std::cin >> id;
 	printf("\n");*/
-        HMODULE mDLL = GetProcess(L"starwarsbattlefrontii.exe");
+
+	// loading string's as unicode.
+        HMODULE mDLL = GetProcess(L"");
         HANDLE fb_mod = GetProcAddress(mDLL, "fb");
         SIZE_T bytesRead = 30000;
         printf("\nSWBF2VehicleHack");
