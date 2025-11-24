@@ -13,8 +13,10 @@
 #include <string>
 #include <vector>
 #include <cstdint> 
+#include <windows.h>
+#include <tlhelp32.h>
 
-std::vector<uint8_t> packBools(const std::vector<bool>& flags) {
+std::vector<uint8_t> Hexbool(const std::vector<bool>& flags) {
     std::vector<uint8_t> bytes;
     bytes.reserve(flags.size());
 
@@ -24,7 +26,7 @@ std::vector<uint8_t> packBools(const std::vector<bool>& flags) {
     return bytes;
 }
 
-std::vector<uint8_t> u16stringToBytes(const std::u16string& s) {
+std::vector<uint8_t> HexString(const std::u16string& s) {
     const uint8_t* ptr = reinterpret_cast<const uint8_t*>(s.data());
     size_t size = s.size() * sizeof(char16_t);
     return std::vector<uint8_t>(ptr, ptr + size);
