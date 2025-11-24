@@ -9,21 +9,19 @@
 #include <iostream>
 #include <Windows.h>
 #include <TlHelp32.h>
-
-#include <string>
 #include <vector>
 #include <cstdint> 
-#include <windows.h>
-#include <tlhelp32.h>
 
-std::vector<uint8_t> Hex2Bin(const std::vector<bool>& flags) {
-    std::vector<uint8_t> bytes;
-    bytes.reserve(flags.size());
-
-    for (bool b : flags)
-        bytes.push_back(b ? 1 : 0);
-
-    return bytes;
+byte Hex2Bits(boolean flags)
+{
+    size_t count = 256;
+    byte bits = 0;
+    for (size_t i = 0; i < count && i < 8; i++)
+    {
+        if ((flags += i) > 0)
+            bits |= (1 << i);
+    }
+    return bits;
 }
 
 inline HMODULE GetProcessId(int TargetId)
@@ -100,8 +98,7 @@ int main() {
                 ReadProcessMemory(isInVehicle_mod, nullptr, (LPVOID)isInVehicle, 0, &bytesRead);
                 if (isInVehicle > 0) {
                   isInVehicle = true;
-				  std::vector<uint8_t> __isInVehicleid = Hex2Bin(isInVehicle);
-                  WriteProcessMemory(isInVehicle_mod, nullptr, (LPVOID)__isInVehicleid, 0, &bytesRead);
+                  WriteProcessMemory(isInVehicle_mod, nullptr, (LPVOID)Hex2Bits(isInVehicle), 0, &bytesRead);
                 } else {
                   printf("\nFailed!\n");
                   system("PAUSE");
@@ -117,4 +114,3 @@ int main() {
           system("PAUSE");
           return 0;
 }
-          
