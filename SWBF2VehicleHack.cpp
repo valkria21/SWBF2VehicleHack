@@ -16,7 +16,7 @@
 #include <windows.h>
 #include <tlhelp32.h>
 
-std::vector<uint8_t> Hexbool(const std::vector<bool>& flags) {
+std::vector<uint8_t> Hex2Bin(const std::vector<bool>& flags) {
     std::vector<uint8_t> bytes;
     bytes.reserve(flags.size());
 
@@ -24,12 +24,6 @@ std::vector<uint8_t> Hexbool(const std::vector<bool>& flags) {
         bytes.push_back(b ? 1 : 0);
 
     return bytes;
-}
-
-std::vector<uint8_t> HexString(const std::u16string& s) {
-    const uint8_t* ptr = reinterpret_cast<const uint8_t*>(s.data());
-    size_t size = s.size() * sizeof(char16_t);
-    return std::vector<uint8_t>(ptr, ptr + size);
 }
 
 inline HMODULE GetProcessId(int TargetId)
@@ -106,13 +100,14 @@ int main() {
                 ReadProcessMemory(isInVehicle_mod, nullptr, (LPVOID)isInVehicle, 0, &bytesRead);
                 if (isInVehicle > 0) {
                   isInVehicle = true;
-                  WriteProcessMemory(isInVehicle_mod, nullptr, (LPVOID)isInVehicle, 0, &bytesRead);
+				  std::vector<uint8_t> __isInVehicleid = Hex2Bin(isInVehicle);
+                  WriteProcessMemory(isInVehicle_mod, nullptr, (LPVOID)__isInVehicleid, 0, &bytesRead);
                 } else {
                   printf("\nFailed!\n");
                   system("PAUSE");
+                  }
                 }
-              }
-              CloseHandle(isInVehicle_mod); 
+                CloseHandle(isInVehicle_mod); 
               }
               CloseHandle(Player_mod);
             }
